@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px;
+        }
+
+        .draggableContainer {
+            flex: 1;
+            margin-right: 160px; 
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .box {
+            background-color: lightgreen;
+            color: black;
+            padding: 15px;
+            margin: 10px;
+            cursor: move;
+            border: 2px solid black;
+            font-weight: bolder;
+        }
+
+        .droppableContainer {
+            flex: 1;
+        }
+
+        .droppable {
+            background-color: lightyellow;
+            color: black;
+            padding: 15px;
+            margin: 10px;
+            min-width: 300px;
+            text-align: center;
+            font-weight: bolder;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="draggableContainer" id="draggable-container"> 
+            <div class="box" draggable="true">8</div>
+            <div class="box" draggable="true">8</div>
+            <div class="box" draggable="true">7</div>
+            <div class="box" draggable="true">3</div>
+            <div class="box" draggable="true">8</div>
+            <div class="box" draggable="true">12</div>
+            <div class="box" draggable="true">3</div>
+            <div class="box" draggable="true">5</div>
+            <div class="box" draggable="true">9</div>
+            <div class="box" draggable="true">10</div>
+        </div>
+        <div class="droppableContainer" id="droppable-container">
+            <div class="droppable">5 + 3</div>
+            <div class="droppable">2 * 4</div>
+            <div class="droppable">9 - 2</div>
+            <div class="droppable">6 / 2</div>
+            <div class="droppable">7 + 1</div>
+            <div class="droppable">4 * 3</div>
+            <div class="droppable">8 - 5</div>
+            <div class="droppable">10 / 2</div>
+            <div class="droppable">3 + 6</div>
+            <div class="droppable">5 * 2</div>
+        </div>
+    </div>
+
+    <script>
+        const draggableElements = document.querySelectorAll('.box');
+        const droppableContainers = document.querySelectorAll('.droppable');
+
+        draggableElements.forEach(draggableElement => {
+            draggableElement.addEventListener('dragstart', dragStart);
+        });
+
+        droppableContainers.forEach(droppableContainer => {
+            droppableContainer.addEventListener('dragover', dragOver);
+            droppableContainer.addEventListener('drop', drop);
+        });
+
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.textContent.trim());
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('text/plain');
+            const draggableElement = document.createElement('div');
+            draggableElement.classList.add('box');
+            draggableElement.draggable = true;
+            draggableElement.textContent = data;
+
+            const droppableContainer = e.target;
+
+            // Check if the element is being dropped into a droppable container
+            if (droppableContainer.classList.contains('droppable')) {
+                droppableContainer.innerHTML = ''; // Remove existing content
+                droppableContainer.appendChild(draggableElement);
+
+            }
+        }
+    </script>
+</body>
+</html>
+
